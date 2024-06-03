@@ -1,0 +1,17 @@
+{
+    "name": "shinden-pl-api",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "type": "module",
+    "files": [
+        "/dist"
+    ],
+    "dependencies": {
+        "cheerio": "1.0.0-rc.10",
+        "typescript": "^5.4.5"
+    },
+    "devDependencies": {
+        "@types/cheerio": "^0.22.35",
+        "@types/node": "^20.14.0"
+    }
+}
