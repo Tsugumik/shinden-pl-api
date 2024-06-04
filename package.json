@@ -6,6 +6,9 @@
     "files": [
         "/dist"
     ],
+    "scripts": {
+        "docs": "typedoc ./src/index.ts"
+    },
     "dependencies": {
         "cheerio": "1.0.0-rc.10",
         "fetch-cookie": "^3.0.1",
@@ -14,6 +17,7 @@
     },
     "devDependencies": {
         "@types/cheerio": "^0.22.35",
-        "@types/node": "^20.14.0"
+        "@types/node": "^20.14.0",
+        "typedoc": "^0.25.13"
     }
 }
