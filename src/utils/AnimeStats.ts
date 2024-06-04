@@ -1,7 +1,7 @@
 /**
  * Class representing the statistics of an anime.
  */
-export default class AnimeStats {
+export class AnimeStats {
     protected _currentlyWatching: number;
     private _viewed: number;
     private _skipped: number;
