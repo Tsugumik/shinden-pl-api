@@ -10,7 +10,7 @@ const fetch = fetchCookie(nodeFetch);
 /**
  * Fetcher class for retrieving and caching HTML content for shinden.pl pages.
  */
-export default class Fetcher {
+export class Fetcher {
     private _maxRetries = 5;
 
     private _cachedMainPageHTML: string | undefined = undefined;
@@ -46,11 +46,11 @@ export default class Fetcher {
         switch(pageType) {
             case PageType.ANIME_MAIN:
                 if(this._cachedMainPageHTML && this._isCachedMainPageHTMLHealthy) return this._cachedMainPageHTML;
-                req_url = this._anime.getUrlToSeries();
+                req_url = this._anime.urlToSeries;
                 break;
             case PageType.EPISODES:
                 if(this._cachedEpisodesPageHTML && this._isCachedEpisodesPageHTMLHealthy) return this._cachedEpisodesPageHTML;
-                req_url = this._anime.getUrlToEpisodes();
+                req_url = this._anime.urlToEpisodes;
                 break;
             default:
                 throw new Error("Not implemented!");
