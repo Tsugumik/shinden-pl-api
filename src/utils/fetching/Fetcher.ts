@@ -1,6 +1,6 @@
 import fetchCookie from "fetch-cookie";
 import nodeFetch, { Request, Response } from "node-fetch";
-import verifyRequest from "./verifyRequest.js";
+import { verifyRequest } from "./verifyRequest.js";
 import { PageType } from "./PageType.js";
 import { Anime } from "../Anime.js";
 import ShindenHeaders from "../ShindenHeaders.js";
