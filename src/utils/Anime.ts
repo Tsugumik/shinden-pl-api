@@ -6,6 +6,7 @@ import { AnimeStats } from "./AnimeStats.js";
 import { AnimeDetails } from "./AnimeDetails.js";
 import { AnimeDetailsType } from "./parsing/AnimeDetailsType.js";
 import { AnimeStatus } from "./AnimeStatus.js";
+import { Episode } from "./Episode.js";
 
 /**
  * Class representing an anime, including its details and statistics.
@@ -21,11 +22,11 @@ export class Anime {
     // Data
     private _rating: number | undefined = undefined;
     private _imageURL: URL | undefined = undefined;
-    private _animeType: AnimeType | undefined = undefined;
     private _description: string | undefined = undefined;
     private _title: string | undefined = undefined;
     private _stats: AnimeStats | undefined = undefined;
     private _details: AnimeDetails | undefined = undefined;
+    private _episodes: Episode[] | undefined = undefined;
 
     /**
      * Checks if the anime is available.
@@ -92,7 +93,7 @@ export class Anime {
         let _aired: string | null = null;
         let _ended: string | null = null;
         let _episodes: number | null = null;
-        let _producers: Array<string> = new Array();
+        let _producers: string[] = new Array<string>();
         let _durationPerEpisodeInMinutes: number | null = null;
         let _MPAA: string | null = null;
 
@@ -238,6 +239,49 @@ export class Anime {
     }
 
     /**
+     * Parses the episodes page of the anime to extract episodes details.
+     */
+    private async parseEpisodesPage() {
+        const HTML = await this._fetcher.fetchPage(PageType.EPISODES);
+
+        const $ = cheerio.load(HTML);
+
+        const RESULT = new Array<Episode>();
+
+        $("tr[data-episode-no]").each(async (_i, data)=>{
+            let title: string = $(data).find("td.ep-title").text();
+            let emissionDate: string = $(data).find("td.ep-date").text();
+            
+            const LANGUAGES = new Array<string>();
+
+            $(data).find("span.flag-icon").each((_j, iconsdata)=>{
+                LANGUAGES.push($(iconsdata).attr("title"));
+            });
+
+            let playersURLstring = $(data).find("a.button.active.detail").attr("href");
+
+            let playersURL: URL | null = playersURLstring ? new URL("https://shinden.pl" + playersURLstring) : null;
+            
+            RESULT.push(new Episode(title, emissionDate, LANGUAGES, playersURL, this._fetcher));
+        });
+
+        this._episodes = RESULT.reverse();
+    }
+
+    /**
+     * Gets the episodes of the anime.
+     * @returns {Promise<Episode[]>} The episodes of the anime.
+     */
+    async getEpisodes(): Promise<Episode[]> {
+        if(this._episodes) {
+            return this._episodes;
+        } else {
+            await this.parseEpisodesPage();
+        }
+        return this._episodes;
+    }
+
+    /**
      * Gets the login required status for the anime.
      * @returns {boolean} True if login is required, false otherwise.
      */
@@ -266,13 +310,13 @@ export class Anime {
      * @param {string} urlToSeries - The URL to the anime series.
      * @param {number} [maxRetries] - The maximum number of retries for fetching pages.
      */
-    constructor(urlToSeries: string, maxRerties?: number) {
+    constructor(urlToSeries: string, maxRetries?: number) {
         this._urlToSeries = new URL(urlToSeries);
-        this._urlToEpisodes = new URL(this._urlToSeries + "/episodes");
+        this._urlToEpisodes = new URL(this._urlToSeries + "/all-episodes");
 
         this.checkURL();
 
-        this._fetcher = new Fetcher(this, maxRerties ? maxRerties : 5);
+        this._fetcher = new Fetcher(this, maxRetries ? maxRetries : 5);
         
         this.checkAvailability();
     }
