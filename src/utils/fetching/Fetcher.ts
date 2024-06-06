@@ -4,6 +4,7 @@ import { verifyRequest } from "./verifyRequest.js";
 import { PageType } from "./PageType.js";
 import { Anime } from "../Anime.js";
 import ShindenHeaders from "../ShindenHeaders.js";
+import { Episode } from "../Episode.js";
 
 const fetch = fetchCookie(nodeFetch);
 
@@ -15,9 +16,11 @@ export class Fetcher {
 
     private _cachedMainPageHTML: string | undefined = undefined;
     private _cachedEpisodesPageHTML: string | undefined = undefined;
+    private _cachedPlayersPageHTML: string | undefined = undefined;
     
     private _isCachedMainPageHTMLHealthy: boolean = false;
     private _isCachedEpisodesPageHTMLHealthy: boolean = false;
+    private _isCachedPlayersPageHTMLHealthy: boolean = false;
     
     private _anime: Anime;
 
@@ -34,10 +37,11 @@ export class Fetcher {
     /**
      * Fetches the specified page type and returns the HTML content.
      * @param {PageType} pageType - The type of page to fetch.
+     * @param {Episode} [episode] - The episode for fetching players page. Only required when pageType == PageType.PLAYERS.
      * @returns {Promise<string>} The HTML content of the fetched page.
      * @throws Will throw an error if the page cannot be verified or if the response is not OK.
      */
-    async fetchPage(pageType: PageType): Promise<string> {
+    async fetchPage(pageType: PageType, episode?: Episode): Promise<string> {
         let req: Response;
         let status: boolean;
         let req_url: URL;
@@ -51,6 +55,11 @@ export class Fetcher {
             case PageType.EPISODES:
                 if(this._cachedEpisodesPageHTML && this._isCachedEpisodesPageHTMLHealthy) return this._cachedEpisodesPageHTML;
                 req_url = this._anime.urlToEpisodes;
+                break;
+            case PageType.PLAYERS:
+                if(this._cachedPlayersPageHTML && this._isCachedPlayersPageHTMLHealthy) return this._cachedPlayersPageHTML;
+                if(!episode) throw new Error("When fetching players, you need to specify the episode argument!");
+                req_url = episode.playersURL;
                 break;
             default:
                 throw new Error("Not implemented!");
@@ -76,6 +85,9 @@ export class Fetcher {
             } else if(status && pageType == PageType.EPISODES) {
                 this._isCachedEpisodesPageHTMLHealthy = true;
                 break;
+            } else if(status && pageType == PageType.PLAYERS) {
+                this._isCachedPlayersPageHTMLHealthy = true;
+                break;
             }
         }
 
@@ -93,6 +105,9 @@ export class Fetcher {
                 return html;
             case PageType.EPISODES:
                 this._cachedEpisodesPageHTML = html;
+                return html;
+            case PageType.PLAYERS:
+                this._cachedPlayersPageHTML = html;
                 return html;
             default:
                 throw new Error("Not implemented!");
