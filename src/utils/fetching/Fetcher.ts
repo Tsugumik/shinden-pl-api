@@ -5,6 +5,8 @@ import { PageType } from "./PageType.js";
 import { Anime } from "../Anime.js";
 import ShindenHeaders from "../ShindenHeaders.js";
 import { Episode } from "../Episode.js";
+import * as cheerio from 'cheerio';
+import { Player } from "../Player.js";
 
 const fetch = fetchCookie(nodeFetch);
 
@@ -115,12 +117,49 @@ export class Fetcher {
     }
 
     /**
-     * Clears the cached HTML content for both main page and episodes page.
+     * Fetches the external player URL for the given player.
+     * @param {Player} player - The player object containing the online ID.
+     * @returns {Promise<URL>} The external player URL.
+     */
+    async getExternalPlayerURL(player: Player): Promise<URL> {
+
+        function sleep(ms: number) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        const URL_1 = `https://api4.shinden.pl/xhr/${player.online_id}/player_load?auth=X2d1ZXN0XzowLDUsMjEwMDAwMDAsMjU1LDQxNzQyOTM2NDQ%3D`;
+        const URL_2 = `https://api4.shinden.pl/xhr/${player.online_id}/player_show?auth=X2d1ZXN0XzowLDUsMjEwMDAwMDAsMjU1LDQxNzQyOTM2NDQ%3D&width=0&height=-1`;
+
+        await fetch(URL_1, {
+            method: "GET",
+            headers: ShindenHeaders.API
+        });
+
+        await sleep(5000);
+
+        const DATA = await fetch(URL_2, {
+            method: "GET",
+            headers: ShindenHeaders.API
+        });
+
+        const HTML = await DATA.text();
+
+        const $ = cheerio.load(HTML);
+        
+        const SRC = $("iframe").attr("src");
+
+        return new URL(SRC.startsWith("//") ? SRC.replace("//", "https://") : SRC);
+    }
+
+    /**
+     * Clears the cached HTML content for all pages.
      */
     clearCache() {
         this._cachedMainPageHTML = undefined;
         this._cachedEpisodesPageHTML = undefined;
+        this._cachedPlayersPageHTML = undefined;
         this._isCachedMainPageHTMLHealthy = false;
         this._isCachedEpisodesPageHTMLHealthy = false;
+        this._isCachedPlayersPageHTMLHealthy = false;
     }
 }
