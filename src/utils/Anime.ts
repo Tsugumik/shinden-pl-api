@@ -15,7 +15,6 @@ export class Anime {
     // Utils
     private _urlToSeries: URL;
     private _urlToEpisodes: URL;
-    private _available: boolean = false;
     private _loginRequiredStatus: boolean | undefined = undefined;
     private _fetcher: Fetcher;
     
