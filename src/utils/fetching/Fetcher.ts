@@ -135,6 +135,7 @@ export class Fetcher {
             headers: ShindenHeaders.API
         });
 
+        // Make the second request after 5 seconds (shinden.pl API requirements)
         await sleep(5000);
 
         const DATA = await fetch(URL_2, {
