@@ -307,7 +307,7 @@ export class Anime {
 
     /**
      * Creates an instance of Anime.
-     * @param {string} urlToSeries - The URL to the anime series.
+     * @param {string} urlToSeries - The URL to the anime series e.g. https://shinden.pl/series/12434-hunter-x-hunter-2011
      * @param {number} [maxRetries] - The maximum number of retries for fetching pages.
      */
     constructor(urlToSeries: string, maxRetries?: number) {
