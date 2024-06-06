@@ -134,6 +134,10 @@ export class Player {
         return this._source;
     }
 
+    /**
+     * Fetches the external player URL e.g. cda.pl or mega.nz.
+     * @returns {Promise<URL>} The external player URL.
+     */
     async getExternalPlayerURL(): Promise<URL> {
         if(this._externalPlayerURL) {
             return this._externalPlayerURL;
