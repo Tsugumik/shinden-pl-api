@@ -69,9 +69,13 @@ export class Fetcher {
             html = await req.text();
 
             status = await verifyRequest(html);
-            if(status) {
+
+            if(status && pageType == PageType.ANIME_MAIN) {
                 this._isCachedMainPageHTMLHealthy = true; 
                 break; 
+            } else if(status && pageType == PageType.EPISODES) {
+                this._isCachedEpisodesPageHTMLHealthy = true;
+                break;
             }
         }
 
