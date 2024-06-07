@@ -153,6 +153,45 @@ export class Fetcher {
     }
 
     /**
+     * Fetches the search results page for a given search query name and page number.
+     * @param {string} name - The search query name.
+     * @param {number} [page] - The page number to fetch.
+     * @param {number} [maxRetries] - The maximum number of retries for fetching the page.
+     * @returns {Promise<string>} The HTML content of the search results page.
+     */
+    static async fetchSearchPage(name: string, page?: number, maxRetries?: number): Promise<string> {
+        let req: Response;
+        let html: string;
+        let status: boolean;
+        let _maxRetries = maxRetries ? maxRetries : 5;
+        const REQ_URL = new URL("https://shinden.pl/series");
+        REQ_URL.searchParams.append("search", name);
+        if(page && page > 1) REQ_URL.searchParams.append("page", page.toString());
+        
+        for(let retry=0; retry < 5 ; retry++) {
+            req = await fetch(REQ_URL, {
+                headers: new Headers(ShindenHeaders.FRONTEND),
+                method: "GET",
+                redirect: "follow"
+            });
+    
+            html = await req.text();
+
+            status = await verifyRequest(html);
+        }
+
+        // Check if the fetch was successful and the page was verified
+        if(!status) throw new Error(`Couldn't verify request status after ${_maxRetries} retries.`);
+
+        if(!req.ok) {
+            throw new Error(`Error parsing search page: response is not OK.`);
+        }
+
+        return html;
+        
+    }
+
+    /**
      * Clears the cached HTML content for all pages.
      */
     clearCache() {
