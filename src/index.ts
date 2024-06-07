@@ -5,8 +5,9 @@ export { AnimeType } from './utils/AnimeType.js';
 export { AnimeStatus } from './utils/AnimeStatus.js';
 export { Episode } from './utils/Episode.js';
 export { Player } from './utils/Player.js';
-export { SearchAnime } from './SearchAnime.js';
-
+export { SearchResult } from './utils/SearchResult.js';
+export { SearchPage } from './utils/SearchPage.js';
+export { searchAnime } from './searchAnime.js';
 
 // Fetching
 export { Fetcher } from './utils/fetching/Fetcher.js';
