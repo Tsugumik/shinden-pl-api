@@ -1,23 +1,33 @@
 {
     "name": "shinden-pl-api",
     "main": "dist/index.js",
+    "version": "1.0.0",
     "types": "dist/index.d.ts",
+    "author": {
+        "name": "Błażej Drozd"
+    },
+    "repository": {
+        "url": "https://github.com/Tsugumik/shinden-pl-api"
+    },
     "type": "module",
+    "license": "MIT",
+    "description": "Unofficial TypeScript API for shinden.pl",
     "files": [
         "/dist"
     ],
     "scripts": {
-        "docs": "typedoc ./src/index.ts"
+        "docs": "typedoc ./src/index.ts",
+        "build": "tsc"
     },
     "dependencies": {
         "cheerio": "1.0.0-rc.10",
         "fetch-cookie": "^3.0.1",
-        "node-fetch": "^3.3.2",
-        "typescript": "^5.4.5"
+        "node-fetch": "^3.3.2"
     },
     "devDependencies": {
         "@types/cheerio": "^0.22.35",
         "@types/node": "^20.14.0",
-        "typedoc": "^0.25.13"
+        "typedoc": "^0.25.13",
+        "typescript": "^5.4.5"
     }
 }
