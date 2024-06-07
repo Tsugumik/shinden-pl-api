@@ -7,7 +7,7 @@
         "name": "Błażej Drozd"
     },
     "repository": {
-        "url": "https://github.com/Tsugumik/shinden-pl-api"
+        "url": "git+https://github.com/Tsugumik/shinden-pl-api.git"
     },
     "type": "module",
     "license": "MIT",
