@@ -53,7 +53,7 @@ console.log(HXH_details.MPAA);
 
 ### Fetch episodes and player URLs
 ```ts
-import { Anime } from "./utils/Anime.js";
+import { Anime } from "shinden-pl-api";
 
 const HXH = new Anime("https://shinden.pl/series/116-hunter-x-hunter");
 const HXH_ep = await HXH.getEpisodes();
