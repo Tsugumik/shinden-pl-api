@@ -65,9 +65,9 @@ export class SearchPage {
             if (_i == 0)
                 return;
             let title, status, rating, series_url, imageURL, animeType;
-            const DESC_COL = $(data).find("li.desc-col").find("a");
-            title = DESC_COL.text();
-            series_url = new URL("https://shinden.pl" + DESC_COL.attr("href"));
+            const DESC_COL = $(data).find("li.desc-col");
+            title = DESC_COL.find("h3").text();
+            series_url = new URL("https://shinden.pl" + DESC_COL.find("a").attr("href"));
             animeType = $("li.title-kind-col").text();
             status = $(data).find("li.title-status-col").text();
             rating = Number($(data).find("li.rate-top").text().replace(",", "."));
