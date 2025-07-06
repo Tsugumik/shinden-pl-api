@@ -1,3 +1,13 @@
+⚠️ IMPORTANT: Project No Longer Supported ⚠️
+
+This TypeScript API for Shinden.pl is no longer actively maintained or supported.
+
+Development efforts have shifted entirely to a new, more performant Rust-based API client. As such, there are no guarantees that this TypeScript version will continue to function correctly due to potential changes on the Shinden.pl website.
+
+For the latest features, improved stability, and blazingly fast performance, please refer to the new Rust project:
+
+➡️ [Shinden.pl API Client (Rust) on GitHub](https://github.com/Tsugumik/shinden-pl-api-rs)
+
 # shinden-pl-api
 Unofficial TypeScript API for shinden.pl
 
